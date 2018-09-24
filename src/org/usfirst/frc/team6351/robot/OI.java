@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team6351.robot;
 
+import org.usfirst.frc.team6351.robot.commands.LimelightTurning;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -28,7 +30,7 @@ public class OI {
 	public Button xBoxRightTrigger = new JoystickButton(xBoxController, RobotMap.Controller1_Right_Trigger);
 
 	public OI() {
-
+		xBoxA.whenPressed(new LimelightTurning());
 	}
 
 	public double driverControllerAxisVaule(int axis) {

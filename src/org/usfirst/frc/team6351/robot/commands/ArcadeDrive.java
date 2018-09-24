@@ -107,7 +107,7 @@ public class ArcadeDrive extends Command {
 	}
 	
 	leftMotorOutput = leftMotorOutput * RobotMap.Drive_Scaling_Teleop;
-	rightMotorOutput = rightMotorOutput * RobotMap.Drive_Scaling_Teleop * RobotMap.Curve_Reduction_Factor;
+	rightMotorOutput = rightMotorOutput * RobotMap.Drive_Scaling_Teleop * RobotMap.Curve_Reduction_Factor * -1;
 	
 	if (rightMotorOutput > RobotMap.MAX_ROBOT_SPEED) {
 		rightMotorOutput = RobotMap.MAX_ROBOT_SPEED;
