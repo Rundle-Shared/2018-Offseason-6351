@@ -32,7 +32,8 @@ public class LimelightTurning extends Command {
 		leftMotorVal = 0;
 		rightMotorVal = 0;
 		
-	Robot.light.setNumber(0);
+	Robot.light.forceSetNumber(0);
+	Robot.camera.forceSetNumber(0);
 		
 	}
 	
@@ -131,12 +132,13 @@ public class LimelightTurning extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		Robot.light.setNumber(1);
+		Robot.light.forceSetNumber(1);
+		Robot.camera.forceSetNumber(1);
 		return false;
 	}
 	
 	public void interrupted() {
-	
+		//Robot.driveTrain.initDefaultCommand();
 	}
 
 }

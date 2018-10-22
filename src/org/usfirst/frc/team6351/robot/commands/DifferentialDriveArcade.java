@@ -74,7 +74,7 @@ public class DifferentialDriveArcade extends Command {
 	}
 	
 	public void interrupted() {
-		
+		//end();
 	}
 
 }

@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
 	public NetworkTable limelight = networktables.getTable("limelight");
 
 	public static NetworkTableEntry light = networktables.getTable("limelight").getEntry("ledMode");
+	public static NetworkTableEntry camera = networktables.getTable("limelight").getEntry("camMode");
 	public static double targetX;
 	public static double targetY;
 	public static double targetArea;
@@ -47,6 +48,7 @@ public class Robot extends TimedRobot {
 		
 		m_oi = new OI();
 		light.forceSetNumber(1);
+		camera.forceSetNumber(1);
 		// limelight.getEntry("ledMode").getDouble(0).forceSetNumber(1);
 		
 		
