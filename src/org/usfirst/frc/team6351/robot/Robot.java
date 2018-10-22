@@ -8,12 +8,13 @@
 package org.usfirst.frc.team6351.robot;
 
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.command.Scheduler;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 
 /**
@@ -24,13 +25,16 @@ public class Robot extends TimedRobot {
 	public static OI m_oi;
 	public static final DriveTrain driveTrain = new DriveTrain();
 	
-	static NetworkTableInstance networktables = NetworkTableInstance.getDefault();
-	public static NetworkTable limelight;
+	public static NetworkTableInstance networktables = NetworkTableInstance.getDefault();
+	public NetworkTable limelight = networktables.getTable("limelight");
+
+	public static NetworkTableEntry light = networktables.getTable("limelight").getEntry("ledMode");
 	public static double targetX;
 	public static double targetY;
 	public static double targetArea;
 	public static double targetsVisible;
 
+	
 	
 	
 
@@ -40,9 +44,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		limelight = networktables.getTable("limelight");
+		
 		m_oi = new OI();
-		networktables.getTable("limelight").getEntry("ledMode").setNumber(1);
+		light.forceSetNumber(1);
+		// limelight.getEntry("ledMode").getDouble(0).forceSetNumber(1);
+		
+		
 		
 
 	}
@@ -111,10 +118,9 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		getLimelight();
-		SmartDashboard.putNumber("Stuff", 0);
+		SmartDashboard.putNumber("LimeCamMode", limelight.getEntry("ledMode").getDouble(0));
 
-
-		SmartDashboard.putNumber("Right Y Joystick", Robot.m_oi.driverControllerAxisVaule(3));
+		
 	}
 
 	/**
@@ -130,6 +136,8 @@ public class Robot extends TimedRobot {
 		targetArea = limelight.getEntry("ta").getDouble(0);
 		targetsVisible = limelight.getEntry("tv").getDouble(0);
 		
+		
 	}
+	
 }
 ;

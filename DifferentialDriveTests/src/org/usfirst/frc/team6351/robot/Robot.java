@@ -31,9 +31,9 @@ public class Robot extends IterativeRobot {
 	public Joystick xBoxControl = new Joystick(0);
 	SpeedControllerGroup m_left = new SpeedControllerGroup(DriveMotorFL, DriveMotorBL);
 	SpeedControllerGroup m_right = new SpeedControllerGroup(DriveMotorFR, DriveMotorBR);
-	public double leftJoy = xBoxControl.getRawAxis(1);
-	public double rightJoy = xBoxControl.getRawAxis(5);
-
+	public double leftTrig = xBoxControl.getRawAxis(2);
+	public double rightTrig = xBoxControl.getRawAxis(3);
+	public double curveReduction;
 	@Override
 	public void robotInit() {
 		m_myRobot = new DifferentialDrive(m_left, m_right);
@@ -42,7 +42,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void teleopPeriodic() {
-
-		m_myRobot.arcadeDrive((xBoxControl.getRawAxis(3) * -1), xBoxControl.getRawAxis(0));
+		curveReduction = 0.95;
+		m_myRobot.arcadeDrive(xBoxControl.getRawAxis(1), xBoxControl.getRawAxis(0));
 	}
 }

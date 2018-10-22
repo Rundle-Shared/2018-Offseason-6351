@@ -8,10 +8,12 @@
 package org.usfirst.frc.team6351.robot;
 
 import org.usfirst.frc.team6351.robot.commands.LimelightTurning;
+import org.usfirst.frc.team6351.robot.commands.TriggerDrive;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj.command.Command;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -31,8 +33,12 @@ public class OI {
 
 	public OI() {
 		xBoxA.whenPressed(new LimelightTurning());
+		xBoxA.whenReleased(TriggerDrive());
 	}
-
+	private Command TriggerDrive() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	public double driverControllerAxisVaule(int axis) {
 		return xBoxController.getRawAxis(axis);
 

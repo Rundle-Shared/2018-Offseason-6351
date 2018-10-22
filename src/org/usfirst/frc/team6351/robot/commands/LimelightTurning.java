@@ -2,6 +2,7 @@ package org.usfirst.frc.team6351.robot.commands;
 
 import org.usfirst.frc.team6351.robot.Robot;
 import org.usfirst.frc.team6351.robot.RobotMap;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -30,6 +31,8 @@ public class LimelightTurning extends Command {
 		
 		leftMotorVal = 0;
 		rightMotorVal = 0;
+		
+	Robot.light.setNumber(0);
 		
 	}
 	
@@ -60,7 +63,7 @@ public class LimelightTurning extends Command {
 					// Too close, object is x% of frame. back up
 				yChange = -0.99*RobotMap.Drive_Scaling_Auto;
 			}
-			else if (targetArea < 20) {
+			else if (targetArea < 5) {
 					// Too far, object is x% of frame, get closer
 				yChange = 0.99*RobotMap.Drive_Scaling_Auto;
 			}
@@ -73,10 +76,10 @@ public class LimelightTurning extends Command {
 			} else {
 				
 			
-			if (targetX < -5) {
+			if (targetX < -10) {
 				xChange = -1 * kP;
 				}
-			else if (targetX > 5) {
+			else if (targetX > 10) {
 				xChange = 1 * kP;
 			}
 			else {
@@ -107,6 +110,15 @@ public class LimelightTurning extends Command {
 			rightMotorVal = 0;
 		}
 			
+		SmartDashboard.putNumber("tx", targetX);
+		SmartDashboard.putNumber("ty", targetY);
+		SmartDashboard.putNumber("targetArea", targetArea);
+		SmartDashboard.putNumber("xChange", xChange);
+		SmartDashboard.putNumber("yChange", yChange);
+		SmartDashboard.putNumber("leftMotorVal", leftMotorVal);
+		SmartDashboard.putNumber("rightMotorVal", rightMotorVal);
+		
+		
 		Robot.driveTrain.setLeft(leftMotorVal);
 		Robot.driveTrain.setRight(rightMotorVal);
 			
@@ -119,12 +131,12 @@ public class LimelightTurning extends Command {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
+		Robot.light.setNumber(1);
 		return false;
 	}
 	
 	public void interrupted() {
-		Robot.driveTrain.setLeft(0);
-		Robot.driveTrain.setRight(0);
+	
 	}
 
 }
