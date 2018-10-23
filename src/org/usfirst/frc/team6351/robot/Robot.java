@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
+import org.usfirst.frc.team6351.robot.subsystems.Sensors;
 
 /**
  * offseason tests
@@ -24,6 +25,7 @@ public class Robot extends TimedRobot {
 
 	public static OI m_oi;
 	public static final DriveTrain driveTrain = new DriveTrain();
+	public static final Sensors sensors = new Sensors();
 	
 	public static NetworkTableInstance networktables = NetworkTableInstance.getDefault();
 	public NetworkTable limelight = networktables.getTable("limelight");
