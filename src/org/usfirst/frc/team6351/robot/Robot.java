@@ -12,11 +12,11 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TimedRobot;
-
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
+import org.usfirst.frc.team6351.robot.auto.DriveStraight;
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team6351.robot.subsystems.Sensors;
 
@@ -41,6 +41,10 @@ public class Robot extends TimedRobot {
 
 	public Encoder encoderLeft = Robot.sensors.encoderLeft;
 	
+	
+	//!!
+    Command autoCommand = new DriveStraight(20);
+	//!!
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -88,7 +92,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-
+		autoCommand.start();
+		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
 		 * switch(autoSelected) { case "My Auto": autonomousCommand = new
