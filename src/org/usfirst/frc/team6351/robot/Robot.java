@@ -117,15 +117,7 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putNumber("GyroAngle()", Robot.sensors.getGyroAngle());
 		SmartDashboard.putNumber("accelX()", Robot.sensors.getXAccel());
 		SmartDashboard.putNumber("accelY()", Robot.sensors.getYAccel());
-		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());
-
-
-
-
-
-
-
-		
+		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());		
 
 
 	}

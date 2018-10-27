@@ -30,6 +30,7 @@ public class DriveStraight extends Command {
 		this(distance, 0.0);
 	}
 	
+	
 	protected void initialize() {
 		Robot.sensors.resetEncoder();
 		
