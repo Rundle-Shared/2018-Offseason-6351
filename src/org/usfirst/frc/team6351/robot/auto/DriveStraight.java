@@ -5,13 +5,13 @@ import org.usfirst.frc.team6351.robot.Robot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
-public class driveStraight extends Command {
+public class DriveStraight extends Command {
 	
 	double dst, tme;
 	double kP = 0.03;
 	boolean timeDrive;
 	
-	public driveStraight(double distance, double time) {
+	public DriveStraight(double distance, double time) {
 		requires(Robot.driveTrain);
 		requires(Robot.sensors);
 		
@@ -24,6 +24,10 @@ public class driveStraight extends Command {
 		} else {
 			timeDrive = false;
 		}
+	}
+	
+	public DriveStraight(double distance) {
+		this(distance, 0.0);
 	}
 	
 	protected void initialize() {

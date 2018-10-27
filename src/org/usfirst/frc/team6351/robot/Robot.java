@@ -10,10 +10,12 @@ package org.usfirst.frc.team6351.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team6351.robot.subsystems.Sensors;
@@ -37,8 +39,7 @@ public class Robot extends TimedRobot {
 	public static double targetArea;
 	public static double targetsVisible;
 
-	
-	
+	public Encoder encoderLeft = Robot.sensors.encoderLeft;
 	
 
 	/**
@@ -105,6 +106,28 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		getLimelight();
+		
+		SmartDashboard.putNumber("get()", encoderLeft.get());
+		SmartDashboard.putBoolean("getDirection()", encoderLeft.getDirection());
+		SmartDashboard.putNumber("getDistane()", encoderLeft.getDistance());
+		SmartDashboard.putNumber("getDistancePerPulse()", encoderLeft.getDistancePerPulse());
+		SmartDashboard.putNumber("getRate()", encoderLeft.getRate());
+		SmartDashboard.putNumber("getRaw()", encoderLeft.getRaw());
+		SmartDashboard.putNumber("getEncodingScale()", encoderLeft.getEncodingScale());
+		SmartDashboard.putNumber("GyroAngle()", Robot.sensors.getGyroAngle());
+		SmartDashboard.putNumber("accelX()", Robot.sensors.getXAccel());
+		SmartDashboard.putNumber("accelY()", Robot.sensors.getYAccel());
+		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());
+
+
+
+
+
+
+
+		
+
+
 	}
 
 	@Override

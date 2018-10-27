@@ -24,6 +24,9 @@ public class Sensors extends Subsystem {
 	public double getGyroAngle() {
 		return gyro.getAngle();
 	}
+	public double getGyroRate() {
+		return gyro.getRate();
+	}
 	public double getXAccel() {
     	return accel.getX();
     }
