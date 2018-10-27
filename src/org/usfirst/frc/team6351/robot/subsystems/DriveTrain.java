@@ -41,6 +41,9 @@ public class DriveTrain extends Subsystem {
 		DriveMotorFR.set(speed);
 		DriveMotorBR.set(speed);
 	}
+	public void arcadeDrive(double speed, double rotation, boolean squared) {
+		m_myRobot.arcadeDrive(speed, rotation, squared);
+	}
 
 	// TODO Auto-generated method stub
 
