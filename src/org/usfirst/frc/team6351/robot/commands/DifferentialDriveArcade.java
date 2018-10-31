@@ -49,24 +49,29 @@ public class DifferentialDriveArcade extends Command {
 		 SmartDashboard.putNumber("rotation", rotation);
 		 
 		 
+		
 		Robot.driveTrain.m_myRobot.setDeadband(0.05);
 		
-
-		if(Math.abs(rotation) < 0.03) {
+		if (Math.abs(speed) < 0.03 && Math.abs(rotation) < 0.03) {
+			Robot.driveTrain.arcadeDrive(0, 0, false);
+		}
+		else if(Math.abs(rotation) < 0.03) {
 			
 		
 			if (Math.abs(speed) < RobotMap.TriggerDeadzone) {
 					speed = 0;
 			} else {
+				//speed = applyDeadband(speed, 0.05);
 				Robot.driveTrain.m_myRobot.arcadeDrive(speed, 0);
 			}
 			}
 			
 			else if (Math.abs(speed) < 0.03) {
 			
-				if (rotation < RobotMap.JoystickDeadzone) {
+				if (Math.abs(rotation) < RobotMap.JoystickDeadzone) {
 					rotation = 0;
 				} else {
+					//rotation = applyDeadband(rotation, 0.05);
 					Robot.driveTrain.m_myRobot.arcadeDrive(0, rotation);
 					//Robot.driveTrain.setLeft(rotation);
 					//Robot.driveTrain.setRight(rotation);
@@ -75,7 +80,8 @@ public class DifferentialDriveArcade extends Command {
 			}
 			
 		else {
-	
+		//speed = applyDeadband(speed, 0.05);
+		//rotation = applyDeadband(rotation, 0.05);
 		Robot.driveTrain.arcadeDrive(speed, rotation, false);
 		
 		}
@@ -90,5 +96,17 @@ public class DifferentialDriveArcade extends Command {
 	public void interrupted() {
 		//end();
 	}
+	
+	protected double applyDeadband(double value, double deadband) {
+	    if (Math.abs(value) > deadband) {
+	      if (value > 0.0) {
+	        return (value - deadband) / (1.0 - deadband);
+	      } else {
+	        return (value + deadband) / (1.0 - deadband);
+	      }
+	    } else {
+	      return 0.0;
+	    }
+	  }
 
 }

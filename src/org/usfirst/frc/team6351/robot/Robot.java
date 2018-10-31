@@ -14,8 +14,13 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team6351.autoPID.AutoRoutine;
+import org.usfirst.frc.team6351.autoPID.DrivePID;
+import org.usfirst.frc.team6351.autoPID.TurnPID;
+import org.usfirst.frc.team6351.robot.auto.AngleTurn;
 import org.usfirst.frc.team6351.robot.auto.DriveStraight;
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team6351.robot.subsystems.Sensors;
@@ -38,12 +43,14 @@ public class Robot extends TimedRobot {
 	public static double targetY;
 	public static double targetArea;
 	public static double targetsVisible;
+	public static LiveWindow lw = new LiveWindow();
+	
 
 	public Encoder encoderLeft = Robot.sensors.encoderLeft;
 	
 	
 	//!!
-    Command autoCommand = new DriveStraight(20);
+    Command autoCommand = new AutoRoutine();
 	//!!
 
 	/**
@@ -56,7 +63,9 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 		light.forceSetNumber(1);
 		camera.forceSetNumber(1);
-		// limelight.getEntry("ledMode").getDouble(0).forceSetNumber(1);
+		limelight.getEntry("ledMode").forceSetNumber(1);
+		
+		
 		
 		
 		
@@ -93,6 +102,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 		autoCommand.start();
+		Robot.sensors.encoderLeft.reset();
+		Robot.sensors.gyro.reset();
 		
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -143,6 +154,7 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 		getLimelight();
 		SmartDashboard.putNumber("LimeCamMode", limelight.getEntry("ledMode").getDouble(0));
+		
 
 		
 	}
@@ -152,6 +164,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		LiveWindow.add(driveTrain);
 	}
 	
 	public void getLimelight() {
@@ -161,6 +174,10 @@ public class Robot extends TimedRobot {
 		targetsVisible = limelight.getEntry("tv").getDouble(0);
 		
 		
+	}
+	
+	public void smartD(String key, double number) {
+		SmartDashboard.putNumber(key, number);
 	}
 	
 }

@@ -3,13 +3,15 @@ package org.usfirst.frc.team6351.autoPID;
 import org.usfirst.frc.team6351.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnPID extends PIDCommand {
 	
 	double m_angle;
-	static double kP = 0;
+	static double kP = 0.1;
 	static double kI = 0;
 	static double kD = 0;
+	int counter = 0;
 	
 	boolean isFinished = false;
 	
@@ -24,7 +26,10 @@ public class TurnPID extends PIDCommand {
 	protected void initialize() {
 		
 		getPIDController().setPID(kP, kI, kD);
-		//Robot.sensors.gyro.reset();
+		//
+		Robot.sensors.gyro.reset();
+		Robot.sensors.encoderLeft.reset();
+		//
 		double currentAngle = Robot.sensors.getGyroAngle();
 		setInputRange(-180, 180);
 		getPIDController().setContinuous(true);
@@ -38,27 +43,31 @@ public class TurnPID extends PIDCommand {
 	
 	public void execute() {
 		boolean onTarget = getPIDController().onTarget();
-		int counter = 0;
+		
 		if (onTarget == true) {
 			counter = counter+1;
-			isFinished = counter >= 5;
+			
+			//changing this value will affect how long the system takes to adjust
+			isFinished = counter >= 20;
 		}
 		else {
 			counter = 0;
 		}
+		SmartDashboard.putBoolean("onTar", onTarget);
 	}
 
 	@Override
 	protected double returnPIDInput() {
 		// TODO Auto-generated method stub
-		return 0;
+		return Robot.sensors.getGyroAngle();
 	}
 
 	@Override
 	protected void usePIDOutput(double output) {
 		// TODO Auto-generated method stub
-		Robot.driveTrain.setLeft(-output);
+		Robot.driveTrain.setLeft(output);
 		Robot.driveTrain.setRight(output);
+		SmartDashboard.putNumber("output", output);
 
 	}
 
