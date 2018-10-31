@@ -3,6 +3,7 @@ package org.usfirst.frc.team6351.robot.auto;
 import org.usfirst.frc.team6351.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AngleTurn extends Command {
 	double currentAngle;
@@ -21,7 +22,7 @@ public class AngleTurn extends Command {
 	
 	
 	public void initialize() {
-		//Robot.sensors.gyro.reset();
+		Robot.sensors.gyro.reset();
 		startAngle = Robot.sensors.getGyroAngle();
 		targetAngle = (startAngle + m_angle);
 		
@@ -36,20 +37,20 @@ public class AngleTurn extends Command {
 			kP = Math.pow((error*0.09), 2) + 0.1;
 		}
 		else {
-			kP = 1;
+			kP = 0.5;
 		}
 		
 		if (targetAngle < currentAngle) {
 			//turning left
-			Robot.driveTrain.m_myRobot.arcadeDrive(0, (0.4*kP*-1));
-			//Robot.driveTrain.setRight(0.4*kP);
-			//Robot.driveTrain.setLeft(0.4*kP*-1);
+			//Robot.driveTrain.m_myRobot.arcadeDrive(0, (0.55*kP*-1));
+			Robot.driveTrain.setRight(0.55*kP);
+			Robot.driveTrain.setLeft(0.55*kP);
 		}
 		else if (targetAngle > currentAngle) {
 			//turning right
-			Robot.driveTrain.m_myRobot.arcadeDrive(0, (0.4*kP));
-			//Robot.driveTrain.setLeft(0.4*kP);
-			//Robot.driveTrain.setRight(0.4*kP*-1);
+			//Robot.driveTrain.m_myRobot.arcadeDrive(0, (0.55*kP));
+			Robot.driveTrain.setLeft(0.55*kP);
+			Robot.driveTrain.setRight(0.55*kP);
 		}
 		
 	}
