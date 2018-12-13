@@ -14,13 +14,13 @@ package org.usfirst.frc.team6351.robot;
  * floating around.
  */
 public class RobotMap {
-	public static final double Drive_Scaling_Auto = 0.6;
-	public static final double Drive_Scaling_Teleop = 1.0;
+	public static final double Drive_Scaling_Auto = 0.5;
+	public static final double Drive_Scaling_Teleop = 0.9;
 	public static final double Curve_Reduction_Factor = 1.0;
 
 	// Deadzone prevents changing of value that occurs when joysick not being used
 	public static final double JoystickDeadzone = 0.1;
-	public static final double TriggerDeadzone = 0.2;
+	public static final double TriggerDeadzone = 0.1;
 
 
 

@@ -11,8 +11,10 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,6 +27,9 @@ import org.usfirst.frc.team6351.robot.auto.DriveStraight;
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team6351.robot.subsystems.Sensors;
 
+import com.kauailabs.navx.frc.AHRS;
+import com.mindsensors.CANLight;
+
 /**
  * offseason tests
  */
@@ -33,6 +38,7 @@ public class Robot extends TimedRobot {
 	public static OI m_oi;
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Sensors sensors = new Sensors();
+	public static final CANLight canlight = new CANLight(3);
 	
 	public static NetworkTableInstance networktables = NetworkTableInstance.getDefault();
 	public NetworkTable limelight = networktables.getTable("limelight");
@@ -43,14 +49,16 @@ public class Robot extends TimedRobot {
 	public static double targetY;
 	public static double targetArea;
 	public static double targetsVisible;
-	public static LiveWindow lw = new LiveWindow();
 	
+	public static LiveWindow lw = new LiveWindow();
 
+	public AHRS NavX = new AHRS(SPI.Port.kMXP);
+	
 	public Encoder encoderLeft = Robot.sensors.encoderLeft;
 	
 	
 	//!!
-    Command autoCommand = new AutoRoutine();
+   
 	//!!
 
 	/**
@@ -63,7 +71,9 @@ public class Robot extends TimedRobot {
 		m_oi = new OI();
 		light.forceSetNumber(1);
 		camera.forceSetNumber(1);
-		limelight.getEntry("ledMode").forceSetNumber(1);
+		//limelight.getEntry("ledMode").forceSetNumber(1);
+		LiveWindow.add(Robot.driveTrain);
+		
 		
 		
 		
@@ -101,6 +111,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		 Command autoCommand = new AutoRoutine();
+		
 		autoCommand.start();
 		Robot.sensors.encoderLeft.reset();
 		Robot.sensors.gyro.reset();
@@ -155,7 +167,18 @@ public class Robot extends TimedRobot {
 		getLimelight();
 		SmartDashboard.putNumber("LimeCamMode", limelight.getEntry("ledMode").getDouble(0));
 		
-
+		SmartDashboard.putNumber("get()", encoderLeft.get());
+		SmartDashboard.putBoolean("getDirection()", encoderLeft.getDirection());
+		SmartDashboard.putNumber("getDistane()", encoderLeft.getDistance());
+		SmartDashboard.putNumber("getDistancePerPulse()", encoderLeft.getDistancePerPulse());
+		SmartDashboard.putNumber("getRate()", encoderLeft.getRate());
+		SmartDashboard.putNumber("getRaw()", encoderLeft.getRaw());
+		SmartDashboard.putNumber("getEncodingScale()", encoderLeft.getEncodingScale());
+		SmartDashboard.putNumber("GyroAngle()", Robot.sensors.getGyroAngle());
+		SmartDashboard.putNumber("accelX()", Robot.sensors.getXAccel());
+		SmartDashboard.putNumber("accelY()", Robot.sensors.getYAccel());
+		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());		
+		SmartDashboard.putNumber("testVal()", NavX.getAngle());	
 		
 	}
 
@@ -165,6 +188,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 		LiveWindow.add(driveTrain);
+		
 	}
 	
 	public void getLimelight() {

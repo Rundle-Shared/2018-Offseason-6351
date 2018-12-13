@@ -9,11 +9,13 @@ public class AutoRoutine extends CommandGroup {
 		
 	
 	
-	addSequential(new DrivePID(84));
-	Timer.delay(0.5);
-	addSequential(new TurnPID(180));
-	Timer.delay(0.5);
-	addSequential(new DrivePID(72));
+	addSequential(new DrivePID(120, 25));
+	Timer.delay(0.15);
+	addSequential(new TurnPID(180, 25));
+	Timer.delay(0.15);
+	addSequential(new DrivePID(120, 25));
+	Timer.delay(0.15);
+	
 	
 	}
 }

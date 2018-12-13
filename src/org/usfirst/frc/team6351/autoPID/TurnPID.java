@@ -3,23 +3,29 @@ package org.usfirst.frc.team6351.autoPID;
 import org.usfirst.frc.team6351.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class TurnPID extends PIDCommand {
 	
 	double m_angle;
-	static double kP = 0.1;
+	static double kP = 0.01;
 	static double kI = 0;
 	static double kD = 0;
+	int threshold;
 	int counter = 0;
 	
 	boolean isFinished = false;
 	
-	public TurnPID(double angle) {
+	public TurnPID(double angle, int thresh) {
 		super(kP, kI, kD);
 		requires(Robot.driveTrain);
 		requires(Robot.sensors);
 		m_angle = angle;
+		threshold = thresh;
+		
+		//this.setName("DriveTrain", "TurnPID");
+		LiveWindow.add(this.getPIDController());
 	}
 	
 	
@@ -35,7 +41,7 @@ public class TurnPID extends PIDCommand {
 		getPIDController().setContinuous(true);
 		setSetpoint(currentAngle + m_angle);
 		getPIDController().setAbsoluteTolerance(2);
-		getPIDController().setOutputRange(-0.5, 0.5);
+		getPIDController().setOutputRange(-0.4, 0.4);
 		
 		getPIDController().enable();
 		
@@ -48,12 +54,13 @@ public class TurnPID extends PIDCommand {
 			counter = counter+1;
 			
 			//changing this value will affect how long the system takes to adjust
-			isFinished = counter >= 20;
+			isFinished = counter >= threshold;
 		}
 		else {
 			counter = 0;
 		}
 		SmartDashboard.putBoolean("onTar", onTarget);
+		LiveWindow.add(getPIDController());
 	}
 
 	@Override

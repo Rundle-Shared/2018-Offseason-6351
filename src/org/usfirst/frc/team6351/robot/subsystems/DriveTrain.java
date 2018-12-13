@@ -24,7 +24,9 @@ public class DriveTrain extends Subsystem {
 	
 	@Override
 	public void initDefaultCommand() {
-		setDefaultCommand(new DifferentialDriveArcade());
+		//!!!!!!
+		setDefaultCommand(new DifferentialDriveVaried());
+		//!!!!!
 	}
 
 
@@ -43,6 +45,10 @@ public class DriveTrain extends Subsystem {
 	}
 	public void arcadeDrive(double speed, double rotation, boolean squared) {
 		m_myRobot.arcadeDrive(speed, rotation, squared);
+	}
+	
+	public void CombinedLimelight(double spd, double rot) {
+		
 	}
 
 	// TODO Auto-generated method stub

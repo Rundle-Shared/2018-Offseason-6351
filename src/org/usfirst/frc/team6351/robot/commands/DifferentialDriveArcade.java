@@ -13,6 +13,9 @@ public class DifferentialDriveArcade extends Command {
 	double rightTrigger = 0;
 	double leftTrigger = 0;
 	double leftJoystickXAxis = 0;
+	int test = 0;
+	double kRamping = 0.2; //max speed increase per time cycle. Results in gradual acceleration, 1 second to hit full speed
+	double prevSpeed = 0;
 	
 	
 	
@@ -47,42 +50,52 @@ public class DifferentialDriveArcade extends Command {
 		 
 		 SmartDashboard.putNumber("speed", speed);
 		 SmartDashboard.putNumber("rotation", rotation);
+		 // trying to ramp motor acceleration to a max increase of 0.2 per 20ms
+		 
 		 
 		 
 		
-		Robot.driveTrain.m_myRobot.setDeadband(0.05);
+		Robot.driveTrain.m_myRobot.setDeadband(0.1);
 		
-		if (Math.abs(speed) < 0.03 && Math.abs(rotation) < 0.03) {
-			Robot.driveTrain.arcadeDrive(0, 0, false);
-		}
-		else if(Math.abs(rotation) < 0.03) {
+		
+		if(Math.abs(rotation) < 0.125) {
 			
 		
-			if (Math.abs(speed) < RobotMap.TriggerDeadzone) {
-					speed = 0;
-			} else {
+			
 				//speed = applyDeadband(speed, 0.05);
-				Robot.driveTrain.m_myRobot.arcadeDrive(speed, 0);
-			}
-			}
+				if (test == 0) {
+					Robot.sensors.gyro.reset();
+					test = test+1;
+				}
+				double eKp = 0.05;
+				double currentAngle = Robot.sensors.getGyroAngle();
+				double error = 0- currentAngle;
+				double turnPower = error*eKp + 0.1; //takes it to clear the deadband
+				Robot.driveTrain.m_myRobot.arcadeDrive(speed, turnPower);
 			
-			else if (Math.abs(speed) < 0.03) {
+		}
 			
-				if (Math.abs(rotation) < RobotMap.JoystickDeadzone) {
-					rotation = 0;
-				} else {
+		else if (Math.abs(speed) == 0) {
+			test = 0;
+			
 					//rotation = applyDeadband(rotation, 0.05);
 					Robot.driveTrain.m_myRobot.arcadeDrive(0, rotation);
 					//Robot.driveTrain.setLeft(rotation);
 					//Robot.driveTrain.setRight(rotation);
-				}
+				
 				
 			}
+		
+		else if (Math.abs(speed) == 0 && Math.abs(rotation) == 0) {
+			test = 0;
+			Robot.driveTrain.arcadeDrive(0, 0, false);
+		}
 			
 		else {
+			test = 0;
 		//speed = applyDeadband(speed, 0.05);
 		//rotation = applyDeadband(rotation, 0.05);
-		Robot.driveTrain.arcadeDrive(speed, rotation, false);
+		Robot.driveTrain.arcadeDrive(speed, rotation, true);
 		
 		}
 		

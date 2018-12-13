@@ -4,16 +4,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogInput;
 public class Sensors extends Subsystem {
 	 
 	public Encoder encoderLeft;
 	public BuiltInAccelerometer accel;
 	public ADXRS450_Gyro gyro;
+
 	
 	public Sensors() {
 		accel = new BuiltInAccelerometer();
 		encoderLeft = new Encoder(0, 1, true, Encoder.EncodingType.k4X); 
 		gyro = new ADXRS450_Gyro();
+	
 	}
 	@Override
 	protected void initDefaultCommand() {
@@ -44,5 +47,6 @@ public class Sensors extends Subsystem {
     public void resetEncoder() {
     	encoderLeft.reset();
     }
+   
 
 }

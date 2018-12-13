@@ -3,27 +3,34 @@ package org.usfirst.frc.team6351.autoPID;
 import org.usfirst.frc.team6351.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivePID extends PIDCommand {
 	
 	static double kP = 0.1;
 	static double kI = 0;
-	static double kD = 0;
+	static double kD = 0.0; //super small increase
 	static double ekP = 0.05;
 	double dst, rotation;
 	boolean isFinished = false;
+	int threshold;
 	int counter = 0;
 	boolean onTarget = false;
 	
 	
 	
-	public DrivePID(double distance) {
+	
+	public DrivePID(double distance, int thresh) {
 		super(kP, kI, kD);
 		dst = distance;
+		threshold = thresh;
 		
 		requires(Robot.driveTrain);
 		requires(Robot.sensors);
+		
+		//this.setName("DriveTrain", "DrivePID");
+		LiveWindow.add(this.getPIDController());
 	}
 	
 	public void initialize() {
@@ -36,10 +43,7 @@ public class DrivePID extends PIDCommand {
 		setSetpoint(currentDst + dst);
 		getPIDController().setContinuous(false);
 		getPIDController().setAbsoluteTolerance(2);
-		getPIDController().setOutputRange(-0.35, 0.35);
-		
-		
-		
+		getPIDController().setOutputRange(-0.4, 0.4);
 		
 		getPIDController().enable();
 		
@@ -50,9 +54,7 @@ public class DrivePID extends PIDCommand {
 		
 		
 		double error = 0-Robot.sensors.getGyroAngle();
-		if (error < 2) {
-			ekP = 0.1;
-		}
+		
 		rotation = error*ekP;
 		
 		
@@ -60,7 +62,7 @@ public class DrivePID extends PIDCommand {
 			counter = counter +1;
 			
 			//changing this value will affect how long the system takes to adjust
-			isFinished = counter >=20;
+			isFinished = counter >= threshold;
 			
 		} else {
 			counter = 0;
@@ -68,6 +70,8 @@ public class DrivePID extends PIDCommand {
 		
 		SmartDashboard.putNumber("counter", counter);
 		SmartDashboard.putBoolean("IsFin", isFinished);
+		
+		LiveWindow.add(this.getPIDController());
 		
 	}
 
