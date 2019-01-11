@@ -1,5 +1,6 @@
 package org.usfirst.frc.team6351.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -7,13 +8,11 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import org.usfirst.frc.team6351.robot.commands.*;
 
-public class DriveTrain extends Subsystem {
-	VictorSP DriveMotorFL = new VictorSP(1);
-	VictorSP DriveMotorBL = new VictorSP(2);
-	VictorSP DriveMotorFR = new VictorSP(3);
-	VictorSP DriveMotorBR = new VictorSP(4);
-	
-	
+public class DriveTrainSPARK extends Subsystem {
+	Spark DriveMotorFL = new Spark(3);
+	Spark DriveMotorBL = new Spark(2);
+	Spark DriveMotorFR = new Spark(0);
+	Spark DriveMotorBR = new Spark(1);
 	
 	//SPARKS for AL is 3,2,0,1
 	
@@ -22,7 +21,7 @@ public class DriveTrain extends Subsystem {
 
 	public DifferentialDrive m_myRobot;
 	
-	public DriveTrain() {
+	public DriveTrainSPARK() {
 		m_myRobot = new DifferentialDrive(m_left, m_right);
 	}
 	

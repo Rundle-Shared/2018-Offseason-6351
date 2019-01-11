@@ -2,7 +2,11 @@ package org.usfirst.frc.team6351.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.BuiltInAccelerometer;
+
+import org.usfirst.frc.team6351.robot.AHRS;
+
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.AnalogInput;
 public class Sensors extends Subsystem {
@@ -10,12 +14,14 @@ public class Sensors extends Subsystem {
 	public Encoder encoderLeft;
 	public BuiltInAccelerometer accel;
 	public ADXRS450_Gyro gyro;
+	public AHRS NavX;
 
 	
 	public Sensors() {
 		accel = new BuiltInAccelerometer();
 		encoderLeft = new Encoder(0, 1, true, Encoder.EncodingType.k4X); 
 		gyro = new ADXRS450_Gyro();
+		NavX = new AHRS(SPI.Port.kMXP);
 	
 	}
 	@Override

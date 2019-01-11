@@ -7,7 +7,7 @@ public class AutoRoutine extends CommandGroup {
 	
 	public AutoRoutine() {
 		
-	
+	//Add sequences here
 	
 	addSequential(new DrivePID(120, 25));
 	Timer.delay(0.15);
@@ -19,3 +19,4 @@ public class AutoRoutine extends CommandGroup {
 	
 	}
 }
+ 

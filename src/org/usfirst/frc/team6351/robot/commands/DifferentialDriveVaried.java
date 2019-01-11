@@ -13,7 +13,7 @@ public class DifferentialDriveVaried extends Command {
 	double rightTrigger = 0;
 	double leftTrigger = 0;
 	double leftJoystickXAxis = 0;
-	double test;
+	boolean reset;
 	
 	
 	
@@ -21,6 +21,7 @@ public class DifferentialDriveVaried extends Command {
 	private double speed = 0;
 	private double rotation = 0;
 	
+
 	public DifferentialDriveVaried() {
 		
 		requires(Robot.driveTrain);
@@ -46,7 +47,9 @@ public class DifferentialDriveVaried extends Command {
 		 turnAxis = leftJoystickXAxis;
 		 
 		 speed = speed * RobotMap.Drive_Scaling_Teleop;
+				 
 		 
+		 //PARABOLIC SPEED FUNCTION
 		 if (Math.abs(turnAxis) < 0.10) {
 				rotation = 0;
 			}
@@ -61,41 +64,39 @@ public class DifferentialDriveVaried extends Command {
 		 SmartDashboard.putNumber("rotation", rotation);
 		 
 		 
-		
+		//Small deadband to prevent virtual glitch
 		Robot.driveTrain.m_myRobot.setDeadband(0.02);
 		
+		//Calling different drive actions based off inputs to ensure smoother operation
+		
+		//regular drive
 		if (speed != 0 && Math.abs(rotation) !=0) {
-			test = 0;
+			reset = true;
 			Robot.driveTrain.m_myRobot.arcadeDrive(speed, rotation, false);
 		}
+		//Drive straight only or turn only
 		else if (speed !=0 || Math.abs(rotation) !=0) {
 			if (speed != 0 && rotation == 0) {
-				if (test == 0) {
+				if (reset == true) {
 					//Robot.sensors.gyro.reset();
-					test++;
+					reset = false;
 				}
 				//double eKp = 0.05;
 				//double currentAngle = Robot.sensors.getGyroAngle();
 				//double error = 0- currentAngle;
-				//double turnPower = error*eKp + 0.15; //takes it to clear the deadband
+				//double turnPower = error*eKp + 0.1; //takes it to clear the deadband
 				
 				Robot.driveTrain.m_myRobot.arcadeDrive(speed, 0, false);
-				//Robot.driveTrain.m_myRobot.tankDrive(speed*0.95, -1*speed);
 			}
+			
 			else if (speed == 0 && Math.abs(rotation) !=0) {
-				test = 0;
+				reset = true;
 				Robot.driveTrain.m_myRobot.arcadeDrive(0, rotation, false);
-				//Robot.driveTrain.m_myRobot.curvatureDrive(0, rotation, true);
-				
-				//FLmotor.set(rotation);
-				//BLmotor.set(rotation);
-				//FRmotor.set(rotation);
-				//BRmotor.set(rotation);
-				
 			}
 		}
+		//Stop
 		else {
-			test = 0;
+			reset = true;
 			Robot.driveTrain.m_myRobot.arcadeDrive(0, 0);
 		}
 		

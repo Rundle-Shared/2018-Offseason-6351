@@ -24,11 +24,6 @@ public class RobotMap {
 
 
 
-	public static final int Motor_Front_Left = 1;
-	public static final int Motor_Back_Left = 2;
-	public static final int Motor_Front_Right = 3;
-	public static final int Motor_Back_Right = 4;
-
 	public static final double MAX_ROBOT_SPEED = 0.99;
 	public static final double MIN_ROBOT_SPEED = -0.99;
 

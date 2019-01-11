@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team6351.autoPID.AutoRoutine;
@@ -24,6 +25,7 @@ import org.usfirst.frc.team6351.autoPID.DrivePID;
 import org.usfirst.frc.team6351.autoPID.TurnPID;
 import org.usfirst.frc.team6351.robot.auto.AngleTurn;
 import org.usfirst.frc.team6351.robot.auto.DriveStraight;
+import org.usfirst.frc.team6351.robot.subsystems.CANLights;
 import org.usfirst.frc.team6351.robot.subsystems.DriveTrain;
 import org.usfirst.frc.team6351.robot.subsystems.Sensors;
 
@@ -38,11 +40,12 @@ public class Robot extends TimedRobot {
 	public static OI m_oi;
 	public static final DriveTrain driveTrain = new DriveTrain();
 	public static final Sensors sensors = new Sensors();
-	public static final CANLight canlight = new CANLight(3);
+	public static final CANLights canlight = new CANLights(3);
 	
+	//Limelight Code
 	public static NetworkTableInstance networktables = NetworkTableInstance.getDefault();
 	public NetworkTable limelight = networktables.getTable("limelight");
-
+	
 	public static NetworkTableEntry light = networktables.getTable("limelight").getEntry("ledMode");
 	public static NetworkTableEntry camera = networktables.getTable("limelight").getEntry("camMode");
 	public static double targetX;
@@ -52,10 +55,11 @@ public class Robot extends TimedRobot {
 	
 	public static LiveWindow lw = new LiveWindow();
 
-	public AHRS NavX = new AHRS(SPI.Port.kMXP);
+	Command autoCommand;
 	
-	public Encoder encoderLeft = Robot.sensors.encoderLeft;
-	
+	SendableChooser<String> m_autoPosition = new SendableChooser<>();
+	SendableChooser<String> m_autoRoutine = new SendableChooser<>();
+
 	
 	//!!
    
@@ -72,12 +76,12 @@ public class Robot extends TimedRobot {
 		light.forceSetNumber(1);
 		camera.forceSetNumber(1);
 		//limelight.getEntry("ledMode").forceSetNumber(1);
-		LiveWindow.add(Robot.driveTrain);
 		
+		m_autoPosition.addDefault("L", "Left");
+		m_autoPosition.addObject("M", "Middle");
+		m_autoPosition.addObject("R", "Right");
 		
-		
-		
-		
+		SmartDashboard.putData("Starting Position", m_autoPosition);
 		
 
 	}
@@ -111,7 +115,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		 Command autoCommand = new AutoRoutine();
+		autoCommand = new AutoRoutine();
 		
 		autoCommand.start();
 		Robot.sensors.encoderLeft.reset();
@@ -135,18 +139,11 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 		getLimelight();
 		
-		SmartDashboard.putNumber("get()", encoderLeft.get());
-		SmartDashboard.putBoolean("getDirection()", encoderLeft.getDirection());
-		SmartDashboard.putNumber("getDistane()", encoderLeft.getDistance());
-		SmartDashboard.putNumber("getDistancePerPulse()", encoderLeft.getDistancePerPulse());
-		SmartDashboard.putNumber("getRate()", encoderLeft.getRate());
-		SmartDashboard.putNumber("getRaw()", encoderLeft.getRaw());
-		SmartDashboard.putNumber("getEncodingScale()", encoderLeft.getEncodingScale());
+		
+		SmartDashboard.putNumber("get()", Robot.sensors.getDriveEncoderDistance());
+		SmartDashboard.putNumber("getDistance()", Robot.sensors.encoderLeft.getDistance());
 		SmartDashboard.putNumber("GyroAngle()", Robot.sensors.getGyroAngle());
-		SmartDashboard.putNumber("accelX()", Robot.sensors.getXAccel());
-		SmartDashboard.putNumber("accelY()", Robot.sensors.getYAccel());
-		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());		
-
+		SmartDashboard.putNumber("NavX", Robot.sensors.NavX.getAngle());
 
 	}
 
@@ -156,6 +153,9 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+		if (autoCommand != null) {
+			autoCommand.cancel();
+		}
 	}
 
 	/**
@@ -165,20 +165,12 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		getLimelight();
-		SmartDashboard.putNumber("LimeCamMode", limelight.getEntry("ledMode").getDouble(0));
 		
-		SmartDashboard.putNumber("get()", encoderLeft.get());
-		SmartDashboard.putBoolean("getDirection()", encoderLeft.getDirection());
-		SmartDashboard.putNumber("getDistane()", encoderLeft.getDistance());
-		SmartDashboard.putNumber("getDistancePerPulse()", encoderLeft.getDistancePerPulse());
-		SmartDashboard.putNumber("getRate()", encoderLeft.getRate());
-		SmartDashboard.putNumber("getRaw()", encoderLeft.getRaw());
-		SmartDashboard.putNumber("getEncodingScale()", encoderLeft.getEncodingScale());
+		
+		SmartDashboard.putNumber("get()", Robot.sensors.getDriveEncoderDistance());
+		SmartDashboard.putNumber("getDistance()", Robot.sensors.encoderLeft.getDistance());
 		SmartDashboard.putNumber("GyroAngle()", Robot.sensors.getGyroAngle());
-		SmartDashboard.putNumber("accelX()", Robot.sensors.getXAccel());
-		SmartDashboard.putNumber("accelY()", Robot.sensors.getYAccel());
-		SmartDashboard.putNumber("gyroRate()", Robot.sensors.getGyroRate());		
-		SmartDashboard.putNumber("testVal()", NavX.getAngle());	
+		SmartDashboard.putNumber("NavX", Robot.sensors.NavX.getAngle());
 		
 	}
 
@@ -205,4 +197,4 @@ public class Robot extends TimedRobot {
 	}
 	
 }
-;
+

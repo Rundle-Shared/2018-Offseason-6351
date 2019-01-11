@@ -8,6 +8,7 @@
 package org.usfirst.frc.team6351.robot;
 
 
+import org.usfirst.frc.team6351.robot.commands.Blink;
 import org.usfirst.frc.team6351.robot.commands.DifferentialDriveArcade;
 import org.usfirst.frc.team6351.robot.commands.LimelightCndtl;
 import org.usfirst.frc.team6351.robot.commands.LimelightConditional;
@@ -26,6 +27,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	//Clear stick is 1
+	//Change xBoxController to 0 and secondaryController to 1 in order to use black controller
 	public Joystick xBoxController = new Joystick(1);
 	public Joystick secondaryController = new Joystick(0);
 	public Joystick bigJoystick = new Joystick(2);
@@ -36,13 +39,16 @@ public class OI {
 	public Button xBoxY = new JoystickButton(xBoxController, RobotMap.Controller1_Y_Button);
 	public Button xBoxLeftTrigger = new JoystickButton(xBoxController, RobotMap.Controller1_Left_Trigger);
 	public Button xBoxRightTrigger = new JoystickButton(xBoxController, RobotMap.Controller1_Right_Trigger);
-	
+	public Button xBoxLeftBumper = new JoystickButton(xBoxController, RobotMap.Controller1_Left_Bumper);
+	public Button xBoxRightBumper = new JoystickButton(xBoxController, RobotMap.Controller1_Right_Bumper);
 
 	public OI() {
 		//xBoxA.whileHeld(new LimelightTurningNew());
 		//xBoxY.whileHeld(new LimelightCndtl());
 		xBoxB.whileHeld(new Rumble("r", 1));
 		xBoxX.whileHeld(new Rumble("l", 1));
+		xBoxLeftBumper.whileHeld(new Blink(255, 0, 0));
+		xBoxRightBumper.whileHeld(new Blink(0, 0, 255));
 	
 	}
 	

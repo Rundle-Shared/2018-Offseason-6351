@@ -6,7 +6,7 @@ import org.usfirst.frc.team6351.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-
+//Same but Joystick dictates speed
 
 public class DifferentialDriveAlternate extends Command {
 	

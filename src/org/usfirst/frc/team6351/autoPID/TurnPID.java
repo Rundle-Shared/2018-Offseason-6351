@@ -14,8 +14,9 @@ public class TurnPID extends PIDCommand {
 	static double kD = 0;
 	int threshold;
 	int counter = 0;
+	double rotation;
 	
-	boolean isFinished = false;
+	boolean finished = false;
 	
 	public TurnPID(double angle, int thresh) {
 		super(kP, kI, kD);
@@ -33,7 +34,7 @@ public class TurnPID extends PIDCommand {
 		
 		getPIDController().setPID(kP, kI, kD);
 		//
-		Robot.sensors.gyro.reset();
+		//Robot.sensors.gyro.reset();
 		Robot.sensors.encoderLeft.reset();
 		//
 		double currentAngle = Robot.sensors.getGyroAngle();
@@ -54,7 +55,7 @@ public class TurnPID extends PIDCommand {
 			counter = counter+1;
 			
 			//changing this value will affect how long the system takes to adjust
-			isFinished = counter >= threshold;
+			finished = counter >= threshold;
 		}
 		else {
 			counter = 0;
@@ -67,6 +68,7 @@ public class TurnPID extends PIDCommand {
 	protected double returnPIDInput() {
 		// TODO Auto-generated method stub
 		return Robot.sensors.getGyroAngle();
+		//return Robot.sensors.NavX.getAngle();
 	}
 
 	@Override
@@ -75,13 +77,25 @@ public class TurnPID extends PIDCommand {
 		Robot.driveTrain.setLeft(output);
 		Robot.driveTrain.setRight(output);
 		SmartDashboard.putNumber("output", output);
-
+		//Robot.driveTrain.m_myRobot.arcadeDrive(0, output, true);
+		/*
+		if (output < 0) {
+			 rotation = (-0.4*(Math.pow(-1*(output), 2)));
+		}
+		else if (output > 0) {
+			 rotation = (0.4*(Math.pow(output, 2)));
+		}
+		else if (output == 0) {
+			 rotation = 0;
+		}
+		Robot.driveTrain.m_myRobot.arcadeDrive(0, rotation, true);
+		*/
 	}
 
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return isFinished;
+		return finished;
 
 		
 	}

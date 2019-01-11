@@ -8,12 +8,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DrivePID extends PIDCommand {
 	
+	//CONTROL Constants - Alter to find Balance
 	static double kP = 0.1;
 	static double kI = 0;
 	static double kD = 0.0; //super small increase
+	//Constant for driving straight
 	static double ekP = 0.05;
 	double dst, rotation;
-	boolean isFinished = false;
+	boolean finished = false;
+	//Threshold is the minimum time in target to return true, counter tracks time in target zone
 	int threshold;
 	int counter = 0;
 	boolean onTarget = false;
@@ -34,13 +37,16 @@ public class DrivePID extends PIDCommand {
 	}
 	
 	public void initialize() {
+		//Setting variables for PID control
 		setInputRange(-400, 400);
 		//
 		Robot.sensors.encoderLeft.reset();
-		Robot.sensors.gyro.reset();
+		//Robot.sensors.gyro.reset();
+		rotation = Robot.sensors.getGyroAngle();
 		//
 		double currentDst = Robot.sensors.getDriveEncoderDistance();
 		setSetpoint(currentDst + dst);
+		//Absolute Tolerance is range, output range is speed, and continues determines if range is spectrum or scale
 		getPIDController().setContinuous(false);
 		getPIDController().setAbsoluteTolerance(2);
 		getPIDController().setOutputRange(-0.4, 0.4);
@@ -53,7 +59,7 @@ public class DrivePID extends PIDCommand {
 		onTarget = getPIDController().onTarget();
 		
 		
-		double error = 0-Robot.sensors.getGyroAngle();
+		double error = rotation - Robot.sensors.getGyroAngle();
 		
 		rotation = error*ekP;
 		
@@ -62,14 +68,14 @@ public class DrivePID extends PIDCommand {
 			counter = counter +1;
 			
 			//changing this value will affect how long the system takes to adjust
-			isFinished = counter >= threshold;
+			finished = counter >= threshold;
 			
 		} else {
 			counter = 0;
 		}
 		
 		SmartDashboard.putNumber("counter", counter);
-		SmartDashboard.putBoolean("IsFin", isFinished);
+		SmartDashboard.putBoolean("IsFin", finished);
 		
 		LiveWindow.add(this.getPIDController());
 		
@@ -93,7 +99,7 @@ public class DrivePID extends PIDCommand {
 	@Override
 	protected boolean isFinished() {
 		// TODO Auto-generated method stub
-		return isFinished;
+		return finished;
 	}
 	
 	protected void interrupted() {
